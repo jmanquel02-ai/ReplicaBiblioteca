@@ -39,6 +39,10 @@ public class Biblioteca {
     }
 
     public Libro buscarLibroPorCodigo(String codigo) {
+        if (codigo == null) {
+            return null;
+        }
+
         for (Libro libro : libros) {
             if (libro.getCodigo().equalsIgnoreCase(codigo)) {
                 return libro;
@@ -49,6 +53,10 @@ public class Biblioteca {
     }
 
     public Usuario buscarUsuarioPorId(String id) {
+        if (id == null) {
+            return null;
+        }
+
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equalsIgnoreCase(id)) {
                 return usuario;
@@ -60,13 +68,19 @@ public class Biblioteca {
 
     public Prestamo registrarPrestamo(String idUsuario, String codigoLibro) {
         Usuario usuario = buscarUsuarioPorId(idUsuario);
+
         if (usuario == null) {
             throw new IllegalArgumentException("No existe un usuario registrado con el id " + idUsuario + ".");
         }
 
         Libro libro = buscarLibroPorCodigo(codigoLibro);
+
         if (libro == null) {
             throw new IllegalArgumentException("No existe un libro registrado con el codigo " + codigoLibro + ".");
+        }
+
+        if (!libro.estaDisponible()) {
+            throw new IllegalArgumentException("El libro con codigo " + codigoLibro + " no esta disponible.");
         }
 
         Prestamo prestamo = new Prestamo(usuario, libro);
@@ -86,8 +100,13 @@ public class Biblioteca {
     }
 
     private Prestamo buscarPrestamoActivoPorCodigoLibro(String codigoLibro) {
+        if (codigoLibro == null) {
+            return null;
+        }
+
         for (Prestamo prestamo : prestamos) {
             boolean mismoLibro = prestamo.getLibro().getCodigo().equalsIgnoreCase(codigoLibro);
+
             if (mismoLibro && prestamo.estaActivo()) {
                 return prestamo;
             }
@@ -114,5 +133,35 @@ public class Biblioteca {
         }
 
         return activos;
+    }
+
+    public ArrayList<Libro> listarLibrosDisponibles() {
+        ArrayList<Libro> disponibles = new ArrayList<>();
+
+        for (Libro libro : libros) {
+            if (libro.estaDisponible()) {
+                disponibles.add(libro);
+            }
+        }
+
+        return disponibles;
+    }
+
+    public ArrayList<Libro> buscarLibrosPorTitulo(String tituloBuscado) {
+        ArrayList<Libro> resultados = new ArrayList<>();
+
+        if (tituloBuscado == null || tituloBuscado.trim().isEmpty()) {
+            return resultados;
+        }
+
+        String tituloNormalizado = tituloBuscado.trim().toLowerCase();
+
+        for (Libro libro : libros) {
+            if (libro.getTitulo().toLowerCase().contains(tituloNormalizado)) {
+                resultados.add(libro);
+            }
+        }
+
+        return resultados;
     }
 }

@@ -1,11 +1,11 @@
 package controlador;
 
-import java.util.ArrayList;
-
 import modelo.Biblioteca;
 import modelo.Libro;
 import modelo.Prestamo;
 import modelo.Usuario;
+
+import java.util.ArrayList;
 
 public class BibliotecaController {
 
@@ -25,8 +25,8 @@ public class BibliotecaController {
         biblioteca.agregarUsuario(usuario);
     }
 
-    public void prestarLibro(String idUsuario, String codigoLibro) {
-        biblioteca.registrarPrestamo(idUsuario, codigoLibro);
+    public Prestamo prestarLibro(String idUsuario, String codigoLibro) {
+        return biblioteca.registrarPrestamo(idUsuario, codigoLibro);
     }
 
     public void devolverLibro(String codigoLibro) {
@@ -43,5 +43,13 @@ public class BibliotecaController {
 
     public ArrayList<Prestamo> obtenerPrestamosActivos() {
         return biblioteca.listarPrestamosActivos();
+    }
+
+    public ArrayList<Libro> obtenerLibrosDisponibles() {
+        return biblioteca.listarLibrosDisponibles();
+    }
+
+    public ArrayList<Libro> buscarLibrosPorTitulo(String tituloBuscado) {
+        return biblioteca.buscarLibrosPorTitulo(tituloBuscado);
     }
 }
