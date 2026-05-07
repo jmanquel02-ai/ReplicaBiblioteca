@@ -2,7 +2,7 @@ package modelo;
 
 import java.util.ArrayList;
 
-public class Biblioteca {
+public class Biblioteca implements GestionBiblioteca {
 
     private ArrayList<Libro> libros;
     private ArrayList<Usuario> usuarios;
@@ -14,6 +14,7 @@ public class Biblioteca {
         this.prestamos = new ArrayList<>();
     }
 
+    @Override
     public void agregarLibro(Libro libro) {
         if (libro == null) {
             throw new IllegalArgumentException("El libro no puede ser nulo.");
@@ -26,6 +27,7 @@ public class Biblioteca {
         libros.add(libro);
     }
 
+    @Override
     public void agregarUsuario(Usuario usuario) {
         if (usuario == null) {
             throw new IllegalArgumentException("El usuario no puede ser nulo.");
@@ -66,6 +68,7 @@ public class Biblioteca {
         return null;
     }
 
+    @Override
     public Prestamo registrarPrestamo(String idUsuario, String codigoLibro) {
         Usuario usuario = buscarUsuarioPorId(idUsuario);
 
@@ -89,6 +92,7 @@ public class Biblioteca {
         return prestamo;
     }
 
+    @Override
     public void devolverLibro(String codigoLibro) {
         Prestamo prestamoActivo = buscarPrestamoActivoPorCodigoLibro(codigoLibro);
 
@@ -115,14 +119,17 @@ public class Biblioteca {
         return null;
     }
 
+    @Override
     public ArrayList<Libro> listarLibros() {
         return new ArrayList<>(libros);
     }
 
+    @Override
     public ArrayList<Usuario> listarUsuarios() {
         return new ArrayList<>(usuarios);
     }
 
+    @Override
     public ArrayList<Prestamo> listarPrestamosActivos() {
         ArrayList<Prestamo> activos = new ArrayList<>();
 
@@ -135,6 +142,7 @@ public class Biblioteca {
         return activos;
     }
 
+    @Override
     public ArrayList<Libro> listarLibrosDisponibles() {
         ArrayList<Libro> disponibles = new ArrayList<>();
 
@@ -147,6 +155,7 @@ public class Biblioteca {
         return disponibles;
     }
 
+    @Override
     public ArrayList<Libro> buscarLibrosPorTitulo(String tituloBuscado) {
         ArrayList<Libro> resultados = new ArrayList<>();
 
