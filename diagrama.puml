@@ -1,0 +1,129 @@
+@startuml
+title Sistema Biblioteca POO MVC
+
+skinparam classAttributeIconSize 0
+
+package modelo {
+
+    interface GestionBiblioteca {
+        + agregarLibro(libro: Libro): void
+        + agregarUsuario(usuario: Usuario): void
+        + registrarPrestamo(idUsuario: String, codigoLibro: String): Prestamo
+        + devolverLibro(codigoLibro: String): void
+        + listarLibros(): ArrayList<Libro>
+        + listarUsuarios(): ArrayList<Usuario>
+        + listarPrestamosActivos(): ArrayList<Prestamo>
+        + listarLibrosDisponibles(): ArrayList<Libro>
+        + buscarLibrosPorTitulo(tituloBuscado: String): ArrayList<Libro>
+    }
+
+    class Biblioteca {
+        - libros: ArrayList<Libro>
+        - usuarios: ArrayList<Usuario>
+        - prestamos: ArrayList<Prestamo>
+        + agregarLibro(libro: Libro): void
+        + agregarUsuario(usuario: Usuario): void
+        + buscarLibroPorCodigo(codigo: String): Libro
+        + buscarUsuarioPorId(id: String): Usuario
+        + registrarPrestamo(idUsuario: String, codigoLibro: String): Prestamo
+        + devolverLibro(codigoLibro: String): void
+        + listarLibros(): ArrayList<Libro>
+        + listarUsuarios(): ArrayList<Usuario>
+        + listarPrestamosActivos(): ArrayList<Prestamo>
+        + listarLibrosDisponibles(): ArrayList<Libro>
+        + buscarLibrosPorTitulo(tituloBuscado: String): ArrayList<Libro>
+    }
+
+    class Libro {
+        - codigo: String
+        - titulo: String
+        - autor: String
+        - disponible: boolean
+        + estaDisponible(): boolean
+        + prestar(): void
+        + devolver(): void
+        + getCodigo(): String
+        + getTitulo(): String
+        + getAutor(): String
+        + toString(): String
+    }
+
+    class Usuario {
+        - id: String
+        - nombre: String
+        - correo: String
+        + getId(): String
+        + getNombre(): String
+        + getCorreo(): String
+        + toString(): String
+    }
+
+    class Prestamo {
+        - usuario: Usuario
+        - libro: Libro
+        - fechaPrestamo: LocalDate
+        - fechaDevolucion: LocalDate
+        - activo: boolean
+        + finalizar(): void
+        + estaActivo(): boolean
+        + getUsuario(): Usuario
+        + getLibro(): Libro
+        + getFechaPrestamo(): LocalDate
+        + getFechaDevolucion(): LocalDate
+        + toString(): String
+    }
+}
+
+package controlador {
+    class BibliotecaController {
+        - biblioteca: Biblioteca
+        + registrarLibro(codigo: String, titulo: String, autor: String): void
+        + registrarUsuario(id: String, nombre: String, correo: String): void
+        + prestarLibro(idUsuario: String, codigoLibro: String): Prestamo
+        + devolverLibro(codigoLibro: String): void
+        + obtenerLibros(): ArrayList<Libro>
+        + obtenerUsuarios(): ArrayList<Usuario>
+        + obtenerPrestamosActivos(): ArrayList<Prestamo>
+        + obtenerLibrosDisponibles(): ArrayList<Libro>
+        + buscarLibrosPorTitulo(tituloBuscado: String): ArrayList<Libro>
+    }
+}
+
+package vista {
+    class BibliotecaVista {
+        - controller: BibliotecaController
+        - scanner: Scanner
+        + iniciar(): void
+        - mostrarMenu(): void
+        - registrarLibro(): void
+        - registrarUsuario(): void
+        - prestarLibro(): void
+        - devolverLibro(): void
+        - listarLibros(): void
+        - listarUsuarios(): void
+        - listarPrestamosActivos(): void
+        - listarLibrosDisponibles(): void
+        - buscarLibrosPorTitulo(): void
+    }
+}
+
+package app {
+    class Main {
+        + main(args: String[]): void
+    }
+}
+
+GestionBiblioteca <|.. Biblioteca
+
+Biblioteca "1" o-- "0..*" Libro
+Biblioteca "1" o-- "0..*" Usuario
+Biblioteca "1" o-- "0..*" Prestamo
+
+Prestamo "1" --> "1" Libro
+Prestamo "1" --> "1" Usuario
+
+BibliotecaController --> Biblioteca
+BibliotecaVista --> BibliotecaController
+Main --> BibliotecaVista
+
+@enduml
